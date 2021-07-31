@@ -23,7 +23,7 @@
 
 
 # def search_school(area, school_name, school_level):
-#       info = schoolinfo(area, school_level)
+      # info = schoolinfo(area, school_level)
 
 #       data = {
 #             'ltcnScCode': info['schoolcode'],
@@ -150,22 +150,25 @@
 import time
 import hcskr
 
+def main():
+      name = str(input('Name: '))
+      birth = str(input('Birth: '))
+      area = str(input('Area: '))
+      school_name = str(input('School Name: '))
+      school_level = str(input('School Level: '))
+      test_password = str(input('Test Password: '))
 
-name = str(input('Name: '))
-birth = str(input('Birth: '))
-area = str(input('Area: '))
-school_name = str(input('School Name: '))
-school_level = str(input('School Level: '))
-test_password = str(input('Test Password: '))
-
-count = 1
+      count = 1
 
 
-while True:
-      for _ in range(6):
-            hcskr.generatetoken(name, birth, area, school_name, school_level, test_password)
-      
-      print(f'\rBlock {count} time', end='')
-      count += 1
+      while True:
+            result = hcskr.generatetoken(name, birth, area, school_name, school_level, test_password)
+            if result['message'] != '학생정보는 검색하였으나, 비밀번호가 틀립니다.':
+                  print(f'\n[!]Error: { result }')
+                  return
+            
+            print(f'\rBlock {count} time', end='')
+            count += 1
 
-      time.sleep(5 * 60 + 0.5)
+
+main()
