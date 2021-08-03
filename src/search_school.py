@@ -1,7 +1,7 @@
 # ltcnScCode, schulCrseScCode 분석을 위한 모듈
 from hcskr.mapping import schoolinfo
 import requests
-import json
+
 
 # API 요청을 할 URL
 api_url = 'https://hcs.eduro.go.kr/v2/searchSchool'
