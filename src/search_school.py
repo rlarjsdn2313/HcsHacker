@@ -1,5 +1,6 @@
 # ltcnScCode, schulCrseScCode 분석을 위한 모듈
 from hcskr.mapping import schoolinfo
+# API에 요청을 보내기 위한 모듈
 import requests
 
 
@@ -34,13 +35,13 @@ def search_school(area, school_name, school_level):
             data
       ).json()
 
-      # API에서 얻은 값을 출력
-      print(res)
+      # API에서 얻은 값을 리턴
+      return res
 
 
 '''
 예시 입력
-search_school('서울', '장승중', '중')
+print(search_school('서울', '장승중', '중'))
 
 예시 출력
 {
