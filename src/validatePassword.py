@@ -1,5 +1,4 @@
 # 로그인을 위한 모듈
-from attr.setters import validate
 from login import login
 # 비밀번호 암호화를 위해 필요한 모듈
 from hcskr.transkey import mTransKey
