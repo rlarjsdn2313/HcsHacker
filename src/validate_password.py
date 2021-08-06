@@ -59,12 +59,7 @@ async def encrypt_password(password):
       return data
 
 
-def validate_password(name, birth, area, school_name, school_level, password):
-      # 학생 인증 토큰을 token에 저장
-      token = login(
-            area, school_name, school_level, birth, name
-      )['token']
-
+def validate_password(token, data):
       # API에 전송할 headers
       headers = {
             "Referer": "https://hcs.eduro.go.kr/",
@@ -72,9 +67,6 @@ def validate_password(name, birth, area, school_name, school_level, password):
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": "application/json;charset=utf-8",
       }
-
-      # data 준비
-      data = asyncio.get_event_loop().run_until_complete(encrypt_password(password))
 
       res = requests.post(
             api_url, headers=headers, json=data

@@ -152,6 +152,11 @@ import hcskr
 from hcskr.mapping import schoolinfo, encrypt
 import requests
 
+import asyncio
+from login import login
+from validate_password import encrypt_password
+from validate_password import validate_password
+
 
 def find_birth():
       name = str(input('Name: '))
@@ -215,14 +220,17 @@ def block():
       school_name = str(input('School Name: '))
       school_level = str(input('School Level: '))
       test_password = str(input('Test Password: '))
-
+      # 학생 인증 토큰을 token에 저장
+      token = login(
+            area, school_name, school_level, birth, name
+      )['token']
       count = 1
-
+      data = asyncio.get_event_loop().run_until_complete(encrypt_password(test_password))
 
       while True:
-            result = hcskr.generatetoken(name, birth, area, school_name, school_level, test_password)
-            if result['message'] != '학생정보는 검색하였으나, 비밀번호가 틀립니다.':
-                  print(f'\n[!]Error: { result }')
+            a = validate_password(token, data)
+            if 'data' not in a.keys():
+                  print(f'\n[!]Error: { a }')
                   return
             
             print(f'\rBlock {count} time', end='')
