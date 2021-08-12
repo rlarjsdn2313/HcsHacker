@@ -14,7 +14,6 @@
 # area = '서울'
 # school_name = '장승중'
 # school_level = '중학교'
-# password = '2313'
 # info = {}
 
 
